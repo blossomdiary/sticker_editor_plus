@@ -84,6 +84,9 @@ class StickerEditingView extends StatefulWidget {
   final Icon? rotateIcon;
   final Icon? closeIcon;
 
+  /// Control whether bottom controls are visible
+  final bool showControl;
+
   /// Create a [StickerEditingBox] widget
   ///
   StickerEditingView(
@@ -113,6 +116,7 @@ class StickerEditingView extends StatefulWidget {
       this.textModalColor = Colors.blue,
       this.textModalBackgroundColor = const Color.fromARGB(240, 200, 200, 200),
       this.textModalConfirmText = 'Done',
+      this.showControl = true,
       required this.assetList})
       : super(key: key);
 
@@ -320,7 +324,7 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                 ),
               ),
             ),
-            widget.viewOnly
+            widget.viewOnly || !widget.showControl
                 ? Container()
                 : Positioned(
                     bottom: 24,
