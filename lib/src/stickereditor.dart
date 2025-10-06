@@ -156,6 +156,48 @@ class _StickerEditingViewState extends State<StickerEditingView> {
     }
   }
 
+  void addText() async {
+    await showEditBox(
+      context: context,
+      textModel: TextModel(
+          name: selectedtextToShare,
+          textStyle: const TextStyle(),
+          top: 50,
+          isSelected: false,
+          textAlign: TextAlign.center,
+          scale: 1,
+          left: 50),
+      textModalTitle: widget.textModalTitle,
+      textModalDefaultText: widget.textModalDefaultText,
+      textModalConfirmText: widget.textModalConfirmText,
+      textModalBackgroundColor: widget.textModalBackgroundColor,
+      textModalColor: widget.textModalColor,
+    );
+  }
+
+  void addSticker() async {
+    selectedTextIndex = -1;
+    stickerWidget(context);
+  }
+
+  void save() {
+    setState(() {
+      for (var e in newStringList) {
+        e.isSelected = false;
+      }
+      for (var e in newimageList) {
+        e.isSelected = false;
+      }
+    });
+
+    if (widget.onSave != null) {
+      widget.onSave!(
+        newStringList.toList(),
+        newimageList.toList(),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -290,57 +332,17 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                           CustomeWidgets.customButton(
                             btnName: widget.textButtonText,
                             color: widget.textButtonColor,
-                            onPressed: () async {
-                              await showEditBox(
-                                context: context,
-                                textModel: TextModel(
-                                    name: selectedtextToShare,
-                                    textStyle: const TextStyle(),
-                                    top: 50,
-                                    isSelected: false,
-                                    textAlign: TextAlign.center,
-                                    scale: 1,
-                                    left: 50),
-                                textModalTitle: widget.textModalTitle,
-                                textModalDefaultText:
-                                    widget.textModalDefaultText,
-                                textModalConfirmText:
-                                    widget.textModalConfirmText,
-                                textModalBackgroundColor:
-                                    widget.textModalBackgroundColor,
-                                textModalColor: widget.textModalColor,
-                              );
-                            },
+                            onPressed: addText,
                           ),
                           CustomeWidgets.customButton(
                             btnName: widget.stickerButtonText,
                             color: widget.stickerButtonColor,
-                            onPressed: () {
-                              selectedTextIndex = -1;
-
-                              stickerWidget(context);
-                            },
+                            onPressed: addSticker,
                           ),
                           CustomeWidgets.customButton(
                             btnName: widget.saveButtonText,
                             color: widget.saveButtonColor,
-                            onPressed: () async {
-                              setState(() {
-                                for (var e in newStringList) {
-                                  e.isSelected = false;
-                                }
-                                for (var e in newimageList) {
-                                  e.isSelected = false;
-                                }
-                              });
-
-                              if (widget.onSave != null) {
-                                widget.onSave!(
-                                  newStringList.toList(),
-                                  newimageList.toList(),
-                                );
-                              }
-                            },
+                            onPressed: save,
                           ),
                         ],
                       ),
