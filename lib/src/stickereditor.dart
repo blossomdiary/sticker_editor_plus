@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:sticker_editor_plus/src/constants_value.dart';
 import 'package:sticker_editor_plus/src/widgets/custom_button.dart';
 
+import 'model/custom_add_requests.dart';
 import 'model/picture_model.dart';
 import 'model/sticker_placement.dart';
 import 'model/text_model.dart';
@@ -58,6 +59,12 @@ class StickerEditingView extends StatefulWidget {
 
   /// Callback for saving
   SaveCallback? onSave;
+
+  /// Custom request to add text. When provided, the default dialog is skipped.
+  final TextAddRequest? onTextAddRequest;
+
+  /// Custom request to pick a sticker. When provided, the default sheet is skipped.
+  final StickerPickRequest? onStickerPickRequest;
 
   /// Initial Text List
   List<TextModel> texts;
@@ -143,7 +150,9 @@ class StickerEditingView extends StatefulWidget {
       required this.assetList,
       this.boundWidthRatio = 0.9,
       this.boundHeightRatio = 0.7,
-      this.defaultPlacement})
+      this.defaultPlacement,
+      this.onTextAddRequest,
+      this.onStickerPickRequest})
       : super(key: key);
 
   @override
@@ -185,6 +194,44 @@ class _StickerEditingViewState extends State<StickerEditingView> {
   void addText() async {
     final placement = widget.defaultPlacement ??
         const StickerPlacement(position: Offset(50, 50));
+    if (widget.onTextAddRequest != null) {
+      final result = await widget.onTextAddRequest!(
+        context,
+        TextAddPayload(
+          defaultText: widget.textModalDefaultText,
+          defaultTextStyle: const TextStyle(),
+          defaultTextAlign: TextAlign.center,
+          fonts: widget.fonts,
+          paletteColors: widget.palletColor,
+        ),
+      );
+      if (result == null) {
+        return;
+      }
+      final text = result.text.trim();
+      setState(() {
+        for (var e in newimageList) {
+          e.isSelected = false;
+        }
+        for (var e in newStringList) {
+          e.isSelected = false;
+        }
+        newStringList.add(
+          TextModel(
+            name: text,
+            textStyle: const TextStyle(),
+            top: placement.position.dy,
+            isSelected: true,
+            textAlign: TextAlign.center,
+            scale: placement.scale,
+            left: placement.position.dx,
+            angle: placement.rotation,
+          ),
+        );
+      });
+      return;
+    }
+
     await showEditBox(
       context: context,
       textModel: TextModel(
@@ -205,7 +252,34 @@ class _StickerEditingViewState extends State<StickerEditingView> {
   }
 
   void addSticker() async {
+    final placement = widget.defaultPlacement ??
+        const StickerPlacement(position: Offset(50, 50));
     selectedTextIndex = -1;
+    if (widget.onStickerPickRequest != null) {
+      final picked = await widget.onStickerPickRequest!(
+        context,
+        StickerPickPayload(assets: widget.assetList ?? const []),
+      );
+      if (picked == null) {
+        return;
+      }
+      setState(() {
+        for (var e in newimageList) {
+          e.isSelected = false;
+        }
+        for (var e in newStringList) {
+          e.isSelected = false;
+        }
+        newimageList.add(PictureModel(
+            stringUrl: picked,
+            top: placement.position.dy,
+            isSelected: true,
+            angle: placement.rotation,
+            scale: placement.scale,
+            left: placement.position.dx));
+      });
+      return;
+    }
     stickerWidget(context);
   }
 
@@ -279,6 +353,7 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                       return TextEditingBox(
                           isSelected: !widget.viewOnly && v.isSelected,
                           viewOnly: widget.viewOnly,
+                          onTextAddRequest: widget.onTextAddRequest,
                           onTap: () {
                             if (widget.viewOnly) {
                               return;
