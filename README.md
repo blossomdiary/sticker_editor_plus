@@ -138,12 +138,71 @@ StickerEditingView(
 ),
 ```
 
-### 5. Sticker Data Serialization
+### 5. Custom Controls (hide default buttons)
+
+Hide the built-in bottom control bar and trigger actions from your own buttons.
+Calling `save()` will invoke `onSave` with the latest texts and pictures.
+
+```dart
+final editorKey = GlobalKey();
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Stack(
+      children: [
+        StickerEditingView(
+          key: editorKey,
+          showControl: false,
+          height: 300,
+          width: 300,
+          child: targetWidget,
+          fonts: fonts,
+          palletColor: colorPallet,
+          assetList: stickerList,
+          texts: texts,
+          pictures: pictures,
+          onSave: (editedTexts, editedPictures) {
+            // Handle save.
+          },
+        ),
+        Positioned(
+          bottom: 16,
+          left: 16,
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () =>
+                    (editorKey.currentState as dynamic).addText(),
+                child: const Text('Add Text'),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () =>
+                    (editorKey.currentState as dynamic).addSticker(),
+                child: const Text('Add Sticker'),
+              ),
+              const SizedBox(width: 8),
+              ElevatedButton(
+                onPressed: () =>
+                    (editorKey.currentState as dynamic).save(),
+                child: const Text('Save'),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+```
+
+### 6. Sticker Data Serialization
 
 Text (`TextModel`) and image (`PictureModel`) data used in the sticker editor can be serialized and deserialized to/from JSON format.  
 This feature allows you to save user-created designs, send them to a server, or reload them to continue editing.
 
-#### 5-1. TextModel/PictureModel Serialization
+#### 6-1. TextModel/PictureModel Serialization
 
 ```dart
 StickerEditingView(
@@ -163,7 +222,7 @@ StickerEditingView(
 );
 ```
 
-#### 5-2. Text & Picture Restoration
+#### 6-2. Text & Picture Restoration
 
 ```dart
 Future<void> _loadSavedDesign() async {
