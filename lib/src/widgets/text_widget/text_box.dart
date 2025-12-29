@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:sticker_editor_plus/src/constants_value.dart';
+import 'package:sticker_editor_plus/src/model/custom_add_requests.dart';
 import 'package:sticker_editor_plus/src/model/text_model.dart';
 
 import 'textstyle_editor.dart';
@@ -38,6 +39,9 @@ class TextEditingBox extends StatefulWidget {
   /// If you use onCancel then you Have to manage IsSelected field in TextModel and [isSelected]
   final Function()? onCancel;
 
+  /// Custom request to edit text. When provided, the default dialog is skipped.
+  final TextAddRequest? onTextAddRequest;
+
   /// Create a [TextEditingBox] widget
   ///
   /// [TextModel] detail of your picture
@@ -57,7 +61,8 @@ class TextEditingBox extends StatefulWidget {
       this.viewOnly = false,
       this.onCancel,
       this.onTap,
-      this.palletColor})
+      this.palletColor,
+      this.onTextAddRequest})
       : super(key: key);
 
   @override
@@ -357,6 +362,24 @@ class _TextEditingBoxState extends State<TextEditingBox> {
 
   // Text edit dailog box
   Future showEditBox({BuildContext? context, TextModel? textModel}) {
+    if (widget.onTextAddRequest != null && textModel != null) {
+      final request = widget.onTextAddRequest!;
+      return request(
+        context!,
+        TextAddPayload(
+          defaultText: textModel.name,
+          defaultTextStyle: textModel.textStyle,
+          defaultTextAlign: textModel.textAlign,
+          fonts: widget.fonts,
+          paletteColors: _palletColor,
+        ),
+      ).then((result) {
+        if (result == null) {
+          return;
+        }
+        setState(() => widget.newText.name = result.text);
+      });
+    }
     return showDialog(
         context: context!,
         builder: (context) {

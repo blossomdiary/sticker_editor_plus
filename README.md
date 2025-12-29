@@ -217,12 +217,76 @@ Widget build(BuildContext context) {
 }
 ```
 
-### 6. Sticker Data Serialization
+### 6. Custom Add UI (text/sticker)
+
+Provide optional callbacks to render your own UI for adding text or picking a sticker.
+The same text callback is used when editing existing text content (not formatting).
+Return `null` to cancel.
+
+```dart
+StickerEditingView(
+  // ...
+  onTextAddRequest: (context, payload) async {
+    final controller = TextEditingController(text: payload.defaultText);
+    final text = await showModalBottomSheet<String?>(
+      context: context,
+      builder: (sheetContext) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: controller, autofocus: true),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: () =>
+                    Navigator.pop(sheetContext, controller.text.trim()),
+                child: const Text('Add'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    if (text == null) return null;
+    return TextAddResult(text);
+  },
+  onStickerPickRequest: (context, payload) async {
+    final picked = await showDialog<String?>(
+      context: context,
+      builder: (dialogContext) {
+        return Dialog(
+          child: GridView.builder(
+            shrinkWrap: true,
+            itemCount: payload.assets.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+            ),
+            itemBuilder: (_, index) {
+              final asset = payload.assets[index];
+              final isNetwork = asset.startsWith('http');
+              return InkWell(
+                onTap: () => Navigator.pop(dialogContext, asset),
+                child: isNetwork
+                    ? Image.network(asset)
+                    : Image.asset(asset),
+              );
+            },
+          ),
+        );
+      },
+    );
+    return picked;
+  },
+)
+```
+
+### 7. Sticker Data Serialization
 
 Text (`TextModel`) and image (`PictureModel`) data used in the sticker editor can be serialized and deserialized to/from JSON format.  
 This feature allows you to save user-created designs, send them to a server, or reload them to continue editing.
 
-#### 6-1. TextModel/PictureModel Serialization
+#### 7-1. TextModel/PictureModel Serialization
 
 ```dart
 StickerEditingView(
@@ -242,7 +306,7 @@ StickerEditingView(
 );
 ```
 
-#### 6-2. Text & Picture Restoration
+#### 7-2. Text & Picture Restoration
 
 ```dart
 Future<void> _loadSavedDesign() async {
