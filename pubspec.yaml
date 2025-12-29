@@ -42,6 +42,12 @@ flutter:
       web:
         pluginClass: StickerEditorWeb
         fileName: sticker_editor_web.dart
+      linux:
+        dartPluginClass: StickerEditorLinux
+        fileName: sticker_editor_linux.dart
+      windows:
+        dartPluginClass: StickerEditorWindows
+        fileName: sticker_editor_windows.dart
 
   # To add assets to your plugin package, add an assets section, like this:
   assets:
