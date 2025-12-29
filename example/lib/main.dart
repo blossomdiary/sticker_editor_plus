@@ -70,7 +70,16 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) =>
                               const StickerEditingBoxScreen()));
                 },
-                child: const Text('StickerEditingBox'))
+                child: const Text('StickerEditingBox')),
+            const SizedBox(height: 10),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CustomAddUiScreen()));
+                },
+                child: const Text('Custom Add UI'))
           ],
         ),
       ),
