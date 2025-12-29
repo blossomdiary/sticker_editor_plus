@@ -84,11 +84,17 @@ class StickerEditingView extends StatefulWidget {
   final Icon? rotateIcon;
   final Icon? closeIcon;
 
-  /// Control whether bottom controls are visible
+  /// Whether to show the bottom control bar in the sticker editor.
+  ///
+  /// If `true` (the default), the bottom controls (such as add text, add sticker, and save buttons)
+  /// are visible, allowing users to interact with the editor. If `false`, these controls are hidden,
+  /// which is useful for view-only modes or when you want to restrict editing capabilities.
   final bool showControl;
 
-  /// Create a [StickerEditingBox] widget
+  /// Create a [StickerEditingBox] widget.
   ///
+  /// [showControl] determines whether the bottom control bar (add text, add sticker, save, etc.)
+  /// is visible. Set to `false` to hide these controls for view-only or restricted editing modes.
   StickerEditingView(
       {Key? key,
       required this.fonts,
