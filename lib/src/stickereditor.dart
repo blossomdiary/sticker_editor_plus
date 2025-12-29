@@ -166,6 +166,8 @@ class _StickerEditingViewState extends State<StickerEditingView> {
     }
   }
 
+  /// Opens a dialog to add a new text sticker to the editor.
+  /// The dialog allows the user to input and style the text before adding it.
   void addText() async {
     await showEditBox(
       context: context,
