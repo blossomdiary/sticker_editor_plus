@@ -91,6 +91,16 @@ class StickerEditingView extends StatefulWidget {
   /// which is useful for view-only modes or when you want to restrict editing capabilities.
   final bool showControl;
 
+  /// Bounding width ratio relative to editor width
+  /// Default: 0.9 (90% of editor width)
+  /// Set to 1.0 to allow full editor width usage
+  final double boundWidthRatio;
+
+  /// Bounding height ratio relative to editor height
+  /// Default: 0.7 (70% of editor height)
+  /// Set to 1.0 to allow full editor height usage
+  final double boundHeightRatio;
+
   /// Create a [StickerEditingBox] widget.
   ///
   /// [showControl] determines whether the bottom control bar (add text, add sticker, save, etc.)
@@ -123,7 +133,9 @@ class StickerEditingView extends StatefulWidget {
       this.textModalBackgroundColor = const Color.fromARGB(240, 200, 200, 200),
       this.textModalConfirmText = 'Done',
       this.showControl = true,
-      required this.assetList})
+      required this.assetList,
+      this.boundWidthRatio = 0.9,
+      this.boundHeightRatio = 0.7})
       : super(key: key);
 
   @override
@@ -216,6 +228,14 @@ class _StickerEditingViewState extends State<StickerEditingView> {
     double height = deviceSize.height;
     double width = deviceSize.width;
 
+    // Calculate the actual editor size
+    final editorWidth = widget.width ?? width * .8;
+    final editorHeight = widget.height ?? height * .8;
+
+    // Calculate the bounding area (based on editor size)
+    final boundWidth = editorWidth * widget.boundWidthRatio;
+    final boundHeight = editorHeight * widget.boundHeightRatio;
+
     return Scaffold(
       backgroundColor: widget.backgroundColor ?? Colors.white,
       body: Obx(
@@ -288,8 +308,8 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                           resizeIcon: widget.resizeIcon,
                           closeIcon: widget.closeIcon,
                           rotateIcon: widget.rotateIcon,
-                          boundWidth: width * .90 - width * .20,
-                          boundHeight: height * .70 - height * .07);
+                          boundWidth: boundWidth,
+                          boundHeight: boundHeight);
                     }).toList(),
                     ...newimageList.map((v) {
                       return StickerEditingBox(
@@ -324,8 +344,8 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                           resizeIcon: widget.resizeIcon,
                           closeIcon: widget.closeIcon,
                           rotateIcon: widget.rotateIcon,
-                          boundWidth: width * .90,
-                          boundHeight: height * .70,
+                          boundWidth: boundWidth,
+                          boundHeight: boundHeight,
                           pictureModel: v);
                     }),
                   ],
