@@ -69,6 +69,26 @@ StickerEditingView(
 ),
 ```
 
+#### Customize Default Placement (Optional)
+
+```Dart
+final size = MediaQuery.of(context).size;
+
+StickerEditingView(
+  height: 300,
+  width: 300,
+  child: targetWidget,
+  fonts: fonts,
+  palletColor: colorPallet,
+  assetList: stickerList,
+  defaultPlacement: StickerPlacement(
+    position: Offset(size.width / 2 - 60, size.height / 2 - 20),
+    scale: 1.1,
+    rotation: 0.1,
+  ),
+),
+```
+
 ### 2. Text Editing Box
 ```Dart
 Container(

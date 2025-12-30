@@ -6,6 +6,7 @@ import 'package:sticker_editor_plus/src/constants_value.dart';
 import 'package:sticker_editor_plus/src/widgets/custom_button.dart';
 
 import 'model/picture_model.dart';
+import 'model/sticker_placement.dart';
 import 'model/text_model.dart';
 import 'widgets/sticker_widget/sticker_box.dart';
 import 'widgets/text_widget/text_box.dart';
@@ -13,6 +14,7 @@ import 'widgets/text_widget/text_box.dart';
 export 'package:sticker_editor_plus/src/constants_value.dart';
 
 export 'model/picture_model.dart';
+export 'model/sticker_placement.dart';
 export 'model/text_model.dart';
 export 'widgets/sticker_widget/sticker_box.dart';
 export 'widgets/text_widget/text_box.dart';
@@ -101,6 +103,10 @@ class StickerEditingView extends StatefulWidget {
   /// Set to 1.0 to allow full editor height usage
   final double boundHeightRatio;
 
+  /// Optional placement for newly added text and image stickers.
+  /// If null, the legacy defaults are used.
+  final StickerPlacement? defaultPlacement;
+
   /// Create a [StickerEditingBox] widget.
   ///
   /// [showControl] determines whether the bottom control bar (add text, add sticker, save, etc.)
@@ -135,7 +141,8 @@ class StickerEditingView extends StatefulWidget {
       this.showControl = true,
       required this.assetList,
       this.boundWidthRatio = 0.9,
-      this.boundHeightRatio = 0.7})
+      this.boundHeightRatio = 0.7,
+      this.defaultPlacement})
       : super(key: key);
 
   @override
@@ -143,12 +150,6 @@ class StickerEditingView extends StatefulWidget {
 }
 
 class _StickerEditingViewState extends State<StickerEditingView> {
-  // offset
-  double x = 120.0;
-  double y = 160.0;
-  double x1 = 100.0;
-  double y1 = 50.0;
-
   // selected text perameter
   double selectedFontSize = 18;
   TextStyle selectedTextstyle =
@@ -181,16 +182,19 @@ class _StickerEditingViewState extends State<StickerEditingView> {
   /// Opens a dialog to add a new text sticker to the editor.
   /// The dialog allows the user to input and style the text before adding it.
   void addText() async {
+    final placement = widget.defaultPlacement ??
+        const StickerPlacement(position: Offset(50, 50));
     await showEditBox(
       context: context,
       textModel: TextModel(
           name: selectedtextToShare,
           textStyle: const TextStyle(),
-          top: 50,
+          top: placement.position.dy,
           isSelected: false,
           textAlign: TextAlign.center,
-          scale: 1,
-          left: 50),
+          scale: placement.scale,
+          left: placement.position.dx,
+          angle: placement.rotation),
       textModalTitle: widget.textModalTitle,
       textModalDefaultText: widget.textModalDefaultText,
       textModalConfirmText: widget.textModalConfirmText,
@@ -467,15 +471,15 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                         for (var e in newStringList) {
                           e.isSelected = false;
                         }
+                        final placement = widget.defaultPlacement ??
+                            StickerPlacement.defaultPlacement();
                         newimageList.add(PictureModel(
-                            stringUrl: widget.assetList![index],
-                            top: y1 + 10 < 300 ? y1 + 10 : 300,
+                            stringUrl: asset,
+                            top: placement.position.dy,
                             isSelected: true,
-                            angle: 0.0,
-                            scale: 1,
-                            left: x1 + 10 < 300 ? x1 + 10 : 300));
-                        x1 = x1 + 10 < 200 ? x1 + 10 : 200;
-                        y1 = y1 + 10 < 200 ? y1 + 10 : 200;
+                            angle: placement.rotation,
+                            scale: placement.scale,
+                            left: placement.position.dx));
                         Navigator.pop(context);
                         setState(() {});
                       },

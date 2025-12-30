@@ -26,6 +26,7 @@ class _StickerEditingViewScreenState extends State<StickerEditingViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text('StickerEditingView'),
@@ -39,6 +40,11 @@ class _StickerEditingViewScreenState extends State<StickerEditingViewScreen> {
         pictures: pictures,
         palletColor: colorPallet,
         assetList: stickerList,
+        defaultPlacement: StickerPlacement(
+          position: Offset(size.width / 2 - 60, size.height / 2 - 20),
+          scale: 1.1,
+          rotation: 0.1,
+        ),
         onSave: ((texts, pictures) {
           // You can save current state via these texts and pictures (JSON)
           setState(() {
