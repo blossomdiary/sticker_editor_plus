@@ -16,6 +16,7 @@ class TextAddPayload {
   final TextAlign defaultTextAlign;
   final List<String> fonts;
   final List<Color>? paletteColors;
+  final bool useColorPicker;
 
   const TextAddPayload({
     required this.defaultText,
@@ -23,6 +24,7 @@ class TextAddPayload {
     required this.defaultTextAlign,
     required this.fonts,
     required this.paletteColors,
+    this.useColorPicker = true,
   });
 }
 

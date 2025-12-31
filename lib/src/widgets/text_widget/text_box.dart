@@ -33,6 +33,9 @@ class TextEditingBox extends StatefulWidget {
   /// Total Fonts option that you want to give to user
   final List<String> fonts;
 
+  /// Whether to allow the color picker in the text style editor.
+  final bool useColorPicker;
+
   /// If you use onTap then you Have to manage IsSelected field in TextModel and [isSelected]
   final Function()? onTap;
 
@@ -62,7 +65,8 @@ class TextEditingBox extends StatefulWidget {
       this.onCancel,
       this.onTap,
       this.palletColor,
-      this.onTextAddRequest})
+      this.onTextAddRequest,
+      this.useColorPicker = true})
       : super(key: key);
 
   @override
@@ -339,17 +343,18 @@ class _TextEditingBoxState extends State<TextEditingBox> {
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return Container(
-            padding: const EdgeInsets.all(4),
-            height: height * .35,
-            child: TextStyleEditor(
-              fonts: widget.fonts,
-              paletteColors: palletColor,
-              textStyle: newText.textStyle,
-              textAlign: newText.textAlign,
-              onTextAlignEdited: (align) {
-                setState(() => newText.textAlign = align);
-              },
+            return Container(
+              padding: const EdgeInsets.all(4),
+              height: height * .35,
+              child: TextStyleEditor(
+                fonts: widget.fonts,
+                paletteColors: palletColor,
+                useColorPicker: widget.useColorPicker,
+                textStyle: newText.textStyle,
+                textAlign: newText.textAlign,
+                onTextAlignEdited: (align) {
+                  setState(() => newText.textAlign = align);
+                },
               onTextStyleEdited: (style) {
                 setState(
                     () => newText.textStyle = newText.textStyle.merge(style));
@@ -372,6 +377,7 @@ class _TextEditingBoxState extends State<TextEditingBox> {
           defaultTextAlign: textModel.textAlign,
           fonts: widget.fonts,
           paletteColors: _palletColor,
+          useColorPicker: widget.useColorPicker,
         ),
       ).then((result) {
         if (result == null) {

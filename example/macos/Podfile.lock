@@ -3,6 +3,9 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - sqflite_darwin (0.0.4):
+    - Flutter
+    - FlutterMacOS
   - sticker_editor_plus (1.0.0):
     - FlutterMacOS
   - url_launcher_macos (0.0.1):
@@ -11,6 +14,7 @@ PODS:
 DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - sqflite_darwin (from `Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin`)
   - sticker_editor_plus (from `Flutter/ephemeral/.symlinks/plugins/sticker_editor_plus/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
@@ -19,6 +23,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  sqflite_darwin:
+    :path: Flutter/ephemeral/.symlinks/plugins/sqflite_darwin/darwin
   sticker_editor_plus:
     :path: Flutter/ephemeral/.symlinks/plugins/sticker_editor_plus/macos
   url_launcher_macos:
@@ -27,6 +33,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
   path_provider_foundation: 608fcb11be570ce83519b076ab6a1fffe2474f05
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   sticker_editor_plus: 4fbb49e75f2412e022b5d8b7da2cd852a1238108
   url_launcher_macos: c83b920a14ed6c0ec4d6069c3ec3e19222607405
 

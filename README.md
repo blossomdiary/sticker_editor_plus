@@ -63,6 +63,7 @@ StickerEditingView(
   child: targetWidget,
   fonts: fonts,
   palletColor: colorPallet,
+  useColorPicker: true,
   assetList: stickerList,
   texts: texts, // Texts to be shown in the Sticker Editor
   pictures: pictures, // Pictures to be shown in the Sticker Editor
@@ -80,6 +81,7 @@ StickerEditingView(
   child: targetWidget,
   fonts: fonts,
   palletColor: colorPallet,
+  useColorPicker: true,
   assetList: stickerList,
   defaultPlacement: StickerPlacement(
     position: Offset(size.width / 2 - 60, size.height / 2 - 20),
@@ -103,6 +105,7 @@ Container(
         boundWidth: 100,
         isSelected: true,
         palletColor: colorPallet,
+        useColorPicker: true,
         newText: TextModel(
             name: 'Text EditingBox',
             textStyle:

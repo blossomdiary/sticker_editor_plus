@@ -5,12 +5,14 @@ class BackgroundColorTool extends StatelessWidget {
   final List<Color> colors;
   final Color? activeColor;
   final Function(Color) onColorPicked;
+  final bool enableColorPicker;
 
   const BackgroundColorTool({
     Key? key,
     required this.colors,
     required this.onColorPicked,
     this.activeColor,
+    this.enableColorPicker = true,
   }) : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class BackgroundColorTool extends StatelessWidget {
       activeColor: activeColor,
       onColorPicked: onColorPicked,
       colors: colors,
+      enableColorPicker: enableColorPicker,
     );
   }
 }

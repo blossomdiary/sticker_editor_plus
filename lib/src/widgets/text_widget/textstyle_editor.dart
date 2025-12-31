@@ -29,6 +29,9 @@ class TextStyleEditor extends StatefulWidget {
   /// Editor's palette colors
   final List<Color>? paletteColors;
 
+  /// Whether to allow the color picker in palette tools.
+  final bool useColorPicker;
+
   /// [onTextStyleEdited] will be called after [textStyle] prop has changed
   final Function(TextStyle)? onTextStyleEdited;
 
@@ -57,6 +60,7 @@ class TextStyleEditor extends StatefulWidget {
     required this.textStyle,
     required this.textAlign,
     this.paletteColors,
+    this.useColorPicker = true,
     this.initialTool = EditorToolbarAction.fontFamilyTool,
     this.onTextStyleEdited,
     this.onTextAlignEdited,
@@ -184,6 +188,7 @@ class _TextStyleEditorState extends State<TextStyleEditor> {
                   return BackgroundColorTool(
                     activeColor: _textStyle.color,
                     colors: _paletteColors,
+                    enableColorPicker: widget.useColorPicker,
                     onColorPicked: (color) {
                       setState(
                           () => _textStyle = _textStyle.copyWith(color: color));
@@ -197,6 +202,7 @@ class _TextStyleEditorState extends State<TextStyleEditor> {
                   return ColorPalette(
                     activeColor: _textStyle.backgroundColor,
                     colors: _paletteColors,
+                    enableColorPicker: widget.useColorPicker,
                     onColorPicked: (color) {
                       setState(() => _textStyle =
                           _textStyle.copyWith(backgroundColor: color));

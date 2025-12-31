@@ -115,6 +115,9 @@ class StickerEditingView extends StatefulWidget {
   /// If null, the legacy defaults are used.
   final StickerPlacement? defaultPlacement;
 
+  /// Whether to allow the color picker in text style editors.
+  final bool useColorPicker;
+
   /// Create a [StickerEditingBox] widget.
   ///
   /// [showControl] determines whether the bottom control bar (add text, add sticker, save, etc.)
@@ -151,6 +154,7 @@ class StickerEditingView extends StatefulWidget {
       this.boundWidthRatio = 0.9,
       this.boundHeightRatio = 0.7,
       this.defaultPlacement,
+      this.useColorPicker = true,
       this.onTextAddRequest,
       this.onStickerPickRequest})
       : super(key: key);
@@ -203,6 +207,7 @@ class _StickerEditingViewState extends State<StickerEditingView> {
           defaultTextAlign: TextAlign.center,
           fonts: widget.fonts,
           paletteColors: widget.palletColor,
+          useColorPicker: widget.useColorPicker,
         ),
       );
       if (result == null) {
@@ -382,6 +387,7 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                             newStringList.removeAt(index);
                           },
                           palletColor: widget.palletColor,
+                          useColorPicker: widget.useColorPicker,
                           fonts: widget.fonts,
                           newText: v,
                           editIcon: widget.editIcon,
