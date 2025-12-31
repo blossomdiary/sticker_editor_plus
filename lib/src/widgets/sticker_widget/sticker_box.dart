@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:sticker_editor_plus/src/model/picture_model.dart';
@@ -144,7 +145,8 @@ class _StickerEditingBoxState extends State<StickerEditingBox> {
                           : Colors.transparent,
                     ),
                     child: widget.pictureModel.stringUrl.startsWith('http')
-                        ? Image.network(widget.pictureModel.stringUrl,
+                        ? CachedNetworkImage(
+                            imageUrl: widget.pictureModel.stringUrl,
                             height: 50, width: 50)
                         : Image.asset(widget.pictureModel.stringUrl,
                             height: 50, width: 50),

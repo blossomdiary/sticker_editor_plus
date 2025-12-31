@@ -1,5 +1,6 @@
 library sticker_editor;
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sticker_editor_plus/src/constants_value.dart';
@@ -484,7 +485,8 @@ class _StickerEditingViewState extends State<StickerEditingView> {
                         setState(() {});
                       },
                       child: isNetwork
-                          ? Image.network(asset, height: 50, width: 50)
+                          ? CachedNetworkImage(
+                              imageUrl: asset, height: 50, width: 50)
                           : Image.asset(asset, height: 50, width: 50),
                     );
                   }),
